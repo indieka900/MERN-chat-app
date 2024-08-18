@@ -33,7 +33,7 @@ export const register = async (req, res) => {
     });
     if (newUser) {
       await newUser.save();
-      generateTokenAndSetCookie(newUser._id,res);
+      generateTokenAndSetCookie(newUser._id, res);
 
       const userResponse = {
         id: newUser._id,
@@ -45,7 +45,7 @@ export const register = async (req, res) => {
 
       return res.status(201).send(userResponse);
     } else {
-        res.status(400).send('Invalid user data');
+      res.status(400).send("Invalid user data");
     }
   } catch (error) {
     console.log(error.message);
@@ -53,8 +53,29 @@ export const register = async (req, res) => {
   }
 };
 
-export const login = (req, res) => {
-  res.status(200).send({ message: "Login route" });
+export const login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    const isPassCorrect = await bcrypt.compare(password, user?.password || "");
+
+    if (!isPassCorrect || !user) {
+      return res.status(400).json({ error: "Invalid username or password" });
+    }
+    generateTokenAndSetCookie(user._id, res);
+    const userResponse = {
+      id: user._id,
+      fullname: user.fullname,
+      username: user.username,
+      //gender: user.gender,
+      profilePic: user.profilePic,
+    };
+
+    return res.status(201).send(userResponse);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Internal server error");
+  }
 };
 
 export const logout = (req, res) => {
