@@ -71,13 +71,19 @@ export const login = async (req, res) => {
       profilePic: user.profilePic,
     };
 
-    return res.status(201).send(userResponse);
+    return res.status(200).send(userResponse);
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Internal server error");
   }
 };
 
-export const logout = (req, res) => {
-  res.status(200).send({ message: "Logout route" });
+export const logout = async (req, res) => {
+  try {
+    res.cookie("jwt", "", { maxAge: 0});
+    res.status(200).json({message: "Logged out succesfully"});
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Internal server error");
+  }
 };
