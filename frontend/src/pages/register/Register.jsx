@@ -1,24 +1,27 @@
 import GenderCheckBox from "./GenderCheckBox";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import UserSignup from "../../hooks/userSignup.js";
 
 function Register() {
   const [formFields, setFormFields] = useState({
     username: "",
     fullname: "",
     password: "",
-    confirmPasssword: "",
+    confirmPassword: "",
     gender: ''
   });
+
+  const { loading, signup} = UserSignup();
 
   const handleCheckBoxChange = (gender) => {
     setFormFields({...formFields, gender})
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     //setLoading(true);
     e.preventDefault();
-    console.log(formFields);
+    await signup(formFields);
     
   };
   return (
@@ -89,11 +92,11 @@ function Register() {
               id="confirm-password"
               placeholder="Confirm Password"
               className="w-full input input-bordered h-10"
-              value={formFields.confirmPasssword}
+              value={formFields.confirmPassword}
               onChange={(e) =>
                 setFormFields((current) => ({
                   ...current,
-                  confirmPasssword: e.target.value,
+                  confirmPassword: e.target.value,
                 }))
               }
             />
