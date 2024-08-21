@@ -9,20 +9,19 @@ function Register() {
     fullname: "",
     password: "",
     confirmPassword: "",
-    gender: ''
+    gender: "",
   });
 
-  const { loading, signup} = UserSignup();
+  const { loading, signup } = UserSignup();
 
   const handleCheckBoxChange = (gender) => {
-    setFormFields({...formFields, gender})
-  }
+    setFormFields({ ...formFields, gender });
+  };
 
   const handleSubmit = async (e) => {
     //setLoading(true);
     e.preventDefault();
     await signup(formFields);
-    
   };
   return (
     <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
@@ -101,16 +100,28 @@ function Register() {
               }
             />
           </div>
-          <GenderCheckBox onCheckboxChange={handleCheckBoxChange} selectedGender={formFields.gender}/>
+          <GenderCheckBox
+            onCheckboxChange={handleCheckBoxChange}
+            selectedGender={formFields.gender}
+          />
           <Link
             to={"/login"}
             className="text-sm hover:text-blue-500 mt-2 inline-block"
           >
             Already have an account?
           </Link>
-
-          <div className="btn btn-block btn-sm mt-2" onClick={handleSubmit}>
-            Register
+          <div>
+            <button
+              className="btn btn-block btn-sm mt-2"
+              disabled={loading}
+              onClick={handleSubmit}
+            >
+              {loading ? (
+                <span className="loading loading-spinner"></span>
+              ) : (
+                "Register"
+              )}
+            </button>
           </div>
         </form>
       </div>
