@@ -1,9 +1,11 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Axios from "axios";
+import { useAuthContext } from "../context/AuthContext";
 
 function UserSignup() {
   const [loading, setLoading] = useState(false);
+  const {setAuthUser} = useAuthContext();
 
   const signup = async ({
     fullname,
@@ -31,8 +33,8 @@ function UserSignup() {
         gender,
       })
         .then((res) => {
-            if (res.error) throw new Error(res.error);
-          console.log(res.status);
+          localStorage.setItem("user-auth", JSON.stringify(res.data));
+          setAuthUser(res.data);
         })
         .catch((err) => {
           setLoading(false);
