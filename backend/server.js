@@ -30,7 +30,16 @@ app.use("/api/users", userRoutes);
 //     res.status(200).send({"message": "Hello world"});
 // });
 
-app.listen(PORT, async () => {
-    await connectMongoDB();
-    console.log(`Server is running on port ${PORT}`);
-});
+const startServer = async () => {
+    try {
+        await connectMongoDB();
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error("Failed to connect to MongoDB", error);
+        process.exit(1); // Exit the process with an error code
+    }
+};
+
+startServer();
