@@ -6,13 +6,14 @@ import useConversation from "../../zustand/useConversation";
 function Message({ message }) {
   const { authUser } = useAuthContext();
   const { selectedConversation } = useConversation();
-  const fromMe = message.senderId === authUser._id;
+  const fromMe = message.senderId === authUser.id;
+  const className =fromMe ? "chat-end" : "chat-start"; 
   const profilePic = fromMe
     ? authUser.profilePic
     : selectedConversation?.profilePic;
 
   return (
-    <div className={`chat ${fromMe ? "chat-end" : "chat-start"}`}>
+    <div className={`chat ${className}`}>
       <div className="chat-image avatar">
         <div className="w-10 rounded-full">
           <img alt="Profile Picture" src={profilePic} />
@@ -26,7 +27,7 @@ function Message({ message }) {
         {message.message}
       </div>
       <div className="chat-footer opacity-50 text-xs flex gap-1 items-center">
-        {extractTime(message.createdAT)}
+        {extractTime(message.createdAt)}
       </div>
     </div>
   );
