@@ -23,7 +23,7 @@ function Message({ message }) {
         Obi-Wan Kenobi
         <time className="text-xs opacity-50">12:45</time>
       </div> */}
-      <div className={`chat-bubble text-white ${fromMe && "bg-blue-500"}`}>
+      <div className={`chat-bubble text-white ${fromMe && "bg-blue-500"} pb-2`}>
         {message.message}
       </div>
       <div className="chat-footer opacity-50 text-xs flex gap-1 items-center">
