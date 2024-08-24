@@ -5,11 +5,11 @@ import useSendMessage from "../../hooks/useSendMessage";
 
 function MessageInput() {
   const [message, setMessage] = useState("");
-  const { loading, sendMessage } = useSendMessage();
+  const { loading, sendMessages } = useSendMessage();
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!message) return;
-    await sendMessage(message);
+    await sendMessages(message);
     setMessage("");
   };
   return (
