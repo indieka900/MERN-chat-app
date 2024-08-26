@@ -27,7 +27,7 @@ function MessageInput() {
           className="absolute inset-y-0 end-0 flex items-center pe-3"
         >
           {loading ? (
-            <span className="loading loading-spinner"></span>
+            <div className="w-full h-1 bg-blue-500 animate-pulse"></div>
           ) : (
             <BsSend />
           )}

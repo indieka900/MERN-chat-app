@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 export default function useSendMessage() {
   const [loading, setLoading] = useState(false);
-  const { messages, setMessages, selectedConversation } = useConversation();
+  const { messages, setMessages, selectedConversation, updateConversation } = useConversation();
 
   const sendMessage = async (message) => {
     setLoading(true);
@@ -22,6 +22,9 @@ export default function useSendMessage() {
       const data = await res.json();
       if (data.error) throw new Error(data.error);
       setMessages([...messages, data]);
+      console.log(data);
+      
+      updateConversation(selectedConversation._id, data);
     } catch (error) {
       toast.error(error.message);
     } finally {
