@@ -6,16 +6,11 @@ export const register = async (req, res) => {
   try {
     const { fullname, username, password, confirmPassword, gender } = req.body;
     if (password !== confirmPassword) {
-      console.log(password, confirmPassword);
-      
-      console.log('error on line 10')
       return res.status(400).send({ error: "Password didn't match!" });
-      ;
     }
     const user = await User.findOne({ username });
 
     if (user) {
-      console.log('error on line 16');
       return res
         .status(400)
         .send({ error: "User with this username already exists" });
@@ -50,12 +45,9 @@ export const register = async (req, res) => {
 
       return res.status(201).send(userResponse);
     } else {
-      console.log('error on line 48');
-      
       res.status(400).send("Invalid user data");
     }
   } catch (error) {
-    console.log(error.message);
     res.status(500).send("Internal server error");
   }
 };
@@ -87,8 +79,8 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    res.cookie("jwt", "", { maxAge: 0});
-    res.status(200).json({message: "Logged out succesfully"});
+    res.cookie("jwt", "", { maxAge: 0 });
+    res.status(200).json({ message: "Logged out succesfully" });
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Internal server error");

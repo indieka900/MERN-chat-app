@@ -1,7 +1,7 @@
 import GenderCheckBox from "./GenderCheckBox";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import UserSignup from "../../hooks/userSignup.js";
+import useSignup from "../../hooks/useSignup.js";
 
 function Register() {
   const [formFields, setFormFields] = useState({
@@ -12,17 +12,25 @@ function Register() {
     gender: "",
   });
 
-  const { loading, signup } = UserSignup();
+  const { loading, signup } = useSignup();
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setFormFields({
+      ...formFields,
+      [name]: value,
+    });
+  };
 
   const handleCheckBoxChange = (gender) => {
     setFormFields({ ...formFields, gender });
   };
 
   const handleSubmit = async (e) => {
-    //setLoading(true);
     e.preventDefault();
     await signup(formFields);
   };
+
   return (
     <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
       <div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
@@ -30,22 +38,18 @@ function Register() {
           Register
           <span className="text-blue-500"> ChatApp</span>
         </h1>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div>
             <label htmlFor="username" className="label p-2">
               <span className="text-base label-text">Username</span>
             </label>
             <input
               type="text"
+              name="username"
               placeholder="Enter Username"
               className="w-full input input-bordered h-10"
               value={formFields.username}
-              onChange={(e) =>
-                setFormFields((current) => ({
-                  ...current,
-                  username: e.target.value,
-                }))
-              }
+              onChange={handleOnChange}
             />
           </div>
           <div>
@@ -54,15 +58,11 @@ function Register() {
             </label>
             <input
               type="text"
+              name="fullname"
               placeholder="Enter Full Name"
               className="w-full input input-bordered h-10"
               value={formFields.fullname}
-              onChange={(e) =>
-                setFormFields((current) => ({
-                  ...current,
-                  fullname: e.target.value,
-                }))
-              }
+              onChange={handleOnChange}
             />
           </div>
           <div>
@@ -71,33 +71,24 @@ function Register() {
             </label>
             <input
               type="password"
+              name="password"
               placeholder="Enter Password"
               className="w-full input input-bordered h-10"
               value={formFields.password}
-              onChange={(e) =>
-                setFormFields((current) => ({
-                  ...current,
-                  password: e.target.value,
-                }))
-              }
+              onChange={handleOnChange}
             />
           </div>
           <div>
-            <label htmlFor="confirm-password" className="label p-2">
+            <label htmlFor="confirmPassword" className="label p-2">
               <span className="text-base label-text">Confirm Password</span>
             </label>
             <input
               type="password"
-              id="confirm-password"
+              name="confirmPassword"
               placeholder="Confirm Password"
               className="w-full input input-bordered h-10"
               value={formFields.confirmPassword}
-              onChange={(e) =>
-                setFormFields((current) => ({
-                  ...current,
-                  confirmPassword: e.target.value,
-                }))
-              }
+              onChange={handleOnChange}
             />
           </div>
           <GenderCheckBox
@@ -112,9 +103,9 @@ function Register() {
           </Link>
           <div>
             <button
+              type="submit"
               className="btn btn-block btn-sm mt-2"
               disabled={loading}
-              onClick={handleSubmit}
             >
               {loading ? (
                 <span className="loading loading-spinner"></span>

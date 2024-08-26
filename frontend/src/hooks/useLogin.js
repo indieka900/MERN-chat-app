@@ -7,10 +7,7 @@ const useLogin = () => {
   const { setAuthUser } = useAuthContext();
 
   const login = async (username, password) => {
-    const success = handleInputErrors(
-      username,
-      password,
-    );
+    const success = handleInputErrors(username, password);
     if (!success) return;
     setLoading(true);
     try {
@@ -19,15 +16,20 @@ const useLogin = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
-      const data = await res.json();
-      localStorage.setItem("user-auth", JSON.stringify(data));
-      setAuthUser(data);
-      if (data.error) {
-        throw new Error(data.error);
-      }
-    } catch (error) {
-      console.log(error);
 
+      console.log(res.status);
+      if (res.status === 200) {
+        const data = await res.json();
+        // Save the auth user in local storage and update the state
+        localStorage.setItem("auth-user", JSON.stringify(data));
+        setAuthUser(data);
+      } else {
+        // Handle non-200 status codes (errors)
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Login failed");
+      }
+
+    } catch (error) {
       toast.error(error.message);
     } finally {
       setLoading(false);
@@ -43,11 +45,13 @@ function handleInputErrors(username, password) {
     return false;
   }
 
-  if (password.lenth <= 6) {
-    toast.error("Password must be atlest 6 characters");
+  if (password.length < 6) {
+    toast.error("Password must be at least 6 characters");
+    return false;
   }
 
   return true;
 }
 
 export default useLogin;
+

@@ -3,13 +3,24 @@ import { Link } from "react-router-dom";
 import useLogin from "../../hooks/useLogin.js";
 
 function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [inputValue, setInputValue] = useState({
+    username: "",
+    password: "",
+  });
 
   const { loading, login } = useLogin();
 
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setInputValue({
+      ...inputValue,
+      [name]: value,
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { username, password } = inputValue;
     await login(username, password);
   };
 
@@ -27,10 +38,11 @@ function Login() {
             </label>
             <input
               type="text"
+              name="username"
               placeholder="Enter Username"
               className="w-full input input-bordered h-10"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={inputValue.username}
+              onChange={handleOnChange}
             />
           </div>
           <div>
@@ -39,10 +51,11 @@ function Login() {
             </label>
             <input
               type="password"
+              name="password"
               placeholder="Enter Password"
               className="w-full input input-bordered h-10"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={inputValue.password}
+              onChange={handleOnChange}
             />
           </div>
           <Link

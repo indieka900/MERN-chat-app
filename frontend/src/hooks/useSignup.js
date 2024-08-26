@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import Axios from "axios";
 import { useAuthContext } from "../context/AuthContext";
 
-function UserSignup() {
+function useSignup() {
   const [loading, setLoading] = useState(false);
   const {setAuthUser} = useAuthContext();
 
@@ -48,7 +48,7 @@ function UserSignup() {
   return { loading, signup };
 }
 
-export default UserSignup;
+export default useSignup;
 
 function handleInputErrors({
   fullname,
